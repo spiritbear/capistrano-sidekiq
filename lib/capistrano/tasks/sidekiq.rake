@@ -42,11 +42,13 @@ namespace :sidekiq do
   def processes_pids
     pids = []
     sidekiq_roles = Array(fetch(:sidekiq_role))
+    count = 0
     sidekiq_roles.each do |role|
       next unless host.roles.include?(role)
       processes = fetch(:"#{ role }_processes") || fetch(:sidekiq_processes)
       processes.times do |idx|
-        pids.push fetch(:sidekiq_pid).gsub(/\.pid$/, "-#{idx}.pid")
+        pids.push fetch(:sidekiq_pid).gsub(/\.pid$/, "-#{count}.pid")
+        count = count + 1
       end
     end
 
